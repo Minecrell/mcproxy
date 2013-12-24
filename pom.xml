@@ -49,8 +49,7 @@
     </repositories>
 
     <properties>
-        <project.mainPackage>${project.groupId}.minecraftproxy</project.mainPackage>
-        <project.mainClass>${project.mainPackage}.MinecraftProxy</project.mainClass>
+        <project.mainPackageName>minecraftproxy</project.mainPackageName>
     </properties>
 
     <build>
@@ -61,9 +60,6 @@
                     <archive>
                         <manifestEntries>
                             <Main-Class>${project.mainClass}</Main-Class>
-                            <Implementation-Title>${project.name}</Implementation-Title>
-                            <Implementation-Version>${project.version}</Implementation-Version>
-                            <Specification-Version>${maven.build.timestamp}</Specification-Version>
                         </manifestEntries>
                     </archive>
                 </configuration>
