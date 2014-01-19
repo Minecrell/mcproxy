@@ -97,7 +97,7 @@ public final class NetworkManager implements Startable, Closeable {
     }
 
     public void close() {
-        if (bossGroup.isShuttingDown() || bossGroup.isShuttingDown()) return;
+        if (bossGroup.isShuttingDown()) return;
 
         this.getLogger().warning("Closing Network Listener...");
 
