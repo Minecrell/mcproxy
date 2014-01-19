@@ -101,9 +101,9 @@
 
                 <configuration>
                     <includeDependency>false</includeDependency>
+                    <obfuscate>false</obfuscate>
                     <options>
                         <option>-dontoptimize</option>
-                        <option>-dontobfuscate</option>
                         <option>-dontwarn</option>
                         <option>-keepclasseswithmembers public class ${project.mainClass} { public static void main(java.lang.String[]); }</option>
                     </options>
