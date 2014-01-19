@@ -7,7 +7,7 @@
     <parent>
         <groupId>net.minecrell</groupId>
         <artifactId>maven-parent</artifactId>
-        <version>3.8.2</version>
+        <version>3.8.3</version>
     </parent>
 
     <artifactId>MinecraftProxy</artifactId>
@@ -43,8 +43,6 @@
         <repository>
             <id>minecrell-repo</id>
             <url>http://repo.minecrell.net/</url>
-            <releases><enabled>true</enabled></releases>
-            <snapshots><enabled>true</enabled></snapshots>
         </repository>
     </repositories>
 
@@ -102,6 +100,7 @@
                 </dependencies>
 
                 <configuration>
+                    <includeDependency>false</includeDependency>
                     <options>
                         <option>-dontoptimize</option>
                         <option>-dontobfuscate</option>
@@ -110,8 +109,6 @@
                     </options>
                     <libs>
                         <lib>${java.home}/lib/rt.jar</lib>
-                        <lib>${java.home}/lib/jce.jar</lib>
-                        <lib>${java.home}/lib/jsse.jar</lib>
                     </libs>
                 </configuration>
             </plugin>
