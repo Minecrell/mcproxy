@@ -1,9 +1,9 @@
 package MinecraftProxy
 
 import (
+	"net"
 	"strings"
 	"strconv"
-	"net"
 )
 
 const (

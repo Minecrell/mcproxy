@@ -2,9 +2,9 @@ package MinecraftProxy
 
 import (
 	"io"
-	"encoding/binary"
 	"net"
 	"bytes"
+	"encoding/binary"
 )
 
 type MinecraftStream struct {
@@ -51,8 +51,8 @@ func  writeVarInt(writer io.Writer, num int) (err error) {
 }
 
 func readShort(reader io.Reader) (num uint16, err error) {
-	buffer := make([]byte, 2) // 2 bytes required for short
-	_, err = reader.Read(buffer); if err != nil { return }
+	// 2 bytes required for short
+	buffer, err := ReadBytes(reader, 2); if err != nil { return }
 	return binary.BigEndian.Uint16(buffer), err
 }
 func writeShort(writer io.Writer, num uint16) error {

@@ -2,10 +2,10 @@ package MinecraftProxy
 
 import (
 	"os"
-	"log"
-	"net"
-	"io"
 	"fmt"
+	"log"
+	"io"
+	"net"
 	"errors"
 	"strconv"
 )
