@@ -1,8 +1,2 @@
 # Auto detect text files and perform LF normalization
 * text=auto
-
-#################
-## Java
-#################
-*.java text
-*.java diff=java
