@@ -43,10 +43,10 @@ func Start(localAddress *net.TCPAddr, remoteAddress *ServerAddress) (err error) 
 
 	for {
 		conn, err := local.AcceptTCP()
-		if conn != nil {
+		if err == nil {
 			go proxy(conn, remoteAddress)
 		} else {
-			log.Fatalln("Connection failed: " + err.Error())
+			log.Println("Connection failed:", err)
 		}
 	}
 }
@@ -77,15 +77,16 @@ func transformHandshake(local *net.TCPConn, remote *net.TCPConn, address *Connec
 func proxy(local *net.TCPConn, remoteHost *ServerAddress) {
 	defer local.Close()
 	remoteAddress, connectAddress, err := remoteHost.Resolve()
-	if err != nil { log.Println("Cannot resolve address: " + err.Error()); return }
+	if err != nil { log.Println("Cannot resolve address:", err.Error()); return }
 
-	log.Println("Proxying " + local.RemoteAddr().String() + " to " + remoteAddress.String())
+	log.Println("Proxying", local.RemoteAddr(), "to", remoteAddress)
 
 	remote, err := net.DialTCP("tcp", nil, remoteAddress)
-	if remote == nil { log.Println("Unable to connect: " + err.Error()); return }
+	if err != nil { log.Println("Unable to connect:", err); return }
 	defer remote.Close()
 
-	transformHandshake(local, remote, connectAddress)
+	err = transformHandshake(local, remote, connectAddress)
+	if err != nil { log.Println("Unable to transform handshake:", err)}
 
 	copyError := make(chan string)
 	go copyStream(local, remote, copyError, true)
@@ -96,7 +97,7 @@ func proxy(local *net.TCPConn, remoteHost *ServerAddress) {
 		log.Println(copyErr)
 	}
 
-	log.Println("Disconnected " + local.RemoteAddr().String() + " from " + remoteAddress.String())
+	log.Println("Disconnected", local.RemoteAddr(), "from", remoteAddress)
 }
 
 func copyStream(from, to net.Conn, out chan<- string, client bool) {
