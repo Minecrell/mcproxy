@@ -41,6 +41,8 @@ func Start(localAddress *net.TCPAddr, remoteAddress *ServerAddress) (err error) 
 	if err != nil { return }
 	defer local.Close()
 
+	log.Println("Network listener started and is waiting for requests.")
+
 	for {
 		conn, err := local.AcceptTCP()
 		if err == nil {
