@@ -11,7 +11,7 @@ import (
 )
 
 func badUsage() {
-	fmt.Fprintln(os.Stderr, "Usage: MinecraftProxy <Host:Port> <RemoteHost:RemotePort> [Version]"); os.Exit(1)
+	fmt.Fprintln(os.Stderr, "Usage: MinecraftProxy <Host:Port> <RemoteHost:RemotePort> [Version|1.7/-]"); os.Exit(1)
 }
 
 func Create() {
@@ -27,7 +27,7 @@ func Create() {
 	_, _, err = remoteHost.Resolve()
 	if err != nil { fmt.Fprintln(os.Stderr, err); os.Exit(1) }
 
-	version := ""
+	version := "1.7"
 	if len(os.Args) > 3 { version = os.Args[3] }
 
 	fmt.Println("Listening to:", os.Args[1])
