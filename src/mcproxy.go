@@ -1,31 +1,44 @@
-package MinecraftProxy
+package main
 
 import (
-	"os"
 	"fmt"
+	"os"
 	"log"
-	"io"
 	"net"
 	"errors"
 	"strconv"
+	"io"
 )
 
-func badUsage() {
-	fmt.Fprintln(os.Stderr, "Usage: MinecraftProxy <Host:Port> <RemoteHost:RemotePort> [Version|1.7/-]"); os.Exit(1)
+const (
+	USAGE = "Usage: mcproxy <Host:Port> <RemoteHost:RemotePort> [Version|1.7/-]"
+)
+
+func printError(a... interface{}) int {
+	fmt.Fprintln(os.Stderr, a)
+	return 1
 }
 
-func Create() {
-	if len(os.Args) < 2  || len(os.Args) > 4 { badUsage() }
+func printUsage() int {
+	return printError(USAGE)
+}
+
+func main() {
+	os.Exit(Create())
+}
+
+func Create() int {
+	if len(os.Args) < 2 || len(os.Args) > 4 { return printUsage() }
 
 	localHost := ParseAddress(os.Args[1])
-	if localHost == nil { badUsage() }
+	if localHost == nil { return printUsage() }
 	localAddress, _, err := localHost.Resolve()
-	if err != nil { fmt.Fprintln(os.Stderr, err); os.Exit(1) }
+	if err != nil { return printError(err) }
 
 	remoteHost := ParseAddress(os.Args[2])
-	if remoteHost == nil { badUsage() }
+	if remoteHost == nil { return printUsage() }
 	_, _, err = remoteHost.Resolve()
-	if err != nil { fmt.Fprintln(os.Stderr, err); os.Exit(1) }
+	if err != nil { return printError(err) }
 
 	version := "1.7"
 	if len(os.Args) > 3 { version = os.Args[3] }
@@ -34,12 +47,14 @@ func Create() {
 	fmt.Println("Proxying to:", os.Args[2])
 	fmt.Println()
 
-	log.SetPrefix("[MinecraftProxy] ")
+	log.SetPrefix("[mcproxy] ")
 	log.SetOutput(os.Stdout)
 	err = Start(localAddress, remoteHost, version)
 	if err != nil {
 		log.Fatalln("Unable to start proxy:", err.Error())
 	}
+
+	return 0
 }
 
 func Start(localAddress *net.TCPAddr, remoteAddress *ServerAddress, version string) (err error) {
@@ -120,3 +135,6 @@ func copyStream(from, to net.Conn, out chan<- string, client bool) {
 		out <- ""
 	}
 }
+
+
+

@@ -1,4 +1,4 @@
-package MinecraftProxy
+package main
 
 import (
 	"net"
@@ -8,8 +8,7 @@ import (
 
 const (
 	DEFAULT_PORT = 25565
-
-	srvService = "minecraft"
+	SRV_SERVICE = "minecraft"
 )
 
 type ServerAddress struct {
@@ -24,11 +23,12 @@ type ConnectAddress struct {
 
 func (address *ServerAddress) Resolve() (tcp *net.TCPAddr, connect *ConnectAddress, err error) {
 	if len(address.Host) > 0 && address.Port < 0 {
-		_, records, err := net.LookupSRV(srvService, "tcp", address.Host)
+		_, records, err := net.LookupSRV(SRV_SERVICE, "tcp", address.Host)
 		if err == nil && len(records) > 0 {
 			ip, err := net.ResolveIPAddr("ip", records[0].Target)
 			if err != nil { return nil, nil, err }
-			return &net.TCPAddr { ip.IP, int(records[0].Port), ip.Zone }, &ConnectAddress { records[0].Target, records[0].Port }, nil
+			return &net.TCPAddr { ip.IP, int(records[0].Port), ip.Zone }, &ConnectAddress { records[0].Target,
+				records[0].Port }, nil
 		}
 	}
 

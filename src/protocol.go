@@ -1,4 +1,4 @@
-package MinecraftProxy
+package main
 
 import (
 	"io"
@@ -20,6 +20,7 @@ func (stream *MinecraftStream) ReadByte() (byte, error) {
 	bytes, err := ReadBytes(stream, 1)
 	return bytes[0], err
 }
+
 func ReadBytes(reader io.Reader, n int) (bytes []byte, err error) {
 	bytes = make([]byte, n)
 	_, err = reader.Read(bytes)
@@ -46,7 +47,7 @@ func encodeVarInt(num int) []byte {
 	buffer := make([]byte, binary.MaxVarintLen32)
 	return buffer[:binary.PutUvarint(buffer, uint64(num))]
 }
-func  writeVarInt(writer io.Writer, num int) (err error) {
+func writeVarInt(writer io.Writer, num int) (err error) {
 	_, err = writer.Write(encodeVarInt(num)); return
 }
 
